@@ -1,0 +1,43 @@
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    mavenCentral()
+
+    maven {
+        name = "spigot-repo"
+        url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    }
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+    compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
+}
+
+/*sourceSets {
+    main {
+        resources {
+            srcDir "src/main/plugin_resources"
+        }
+    }
+}*/
+
+processResources() {
+    from("src/main/plugin_resources") {
+        into "resources"
+    }
+}
+
+
+task fatJar(type: Zip) {
+    group = "build"
+
+    archiveExtension.set("jar")
+    destinationDirectory = file("$buildDir/libs")
+
+    from(sourceSets.main.output)
+}

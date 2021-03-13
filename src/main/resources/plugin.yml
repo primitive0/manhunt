@@ -1,0 +1,10 @@
+main: me.primitive.manhunt.ManhuntPlugin
+name: Manhunt
+api-version: 1.15
+version: 0.1
+author: Primitive
+description: There is no description
+commands:
+  manhunt:
+    description: TODO
+    usage: /manhunt
