@@ -1,5 +1,7 @@
 package me.primitive.manhunt.commands;
 
+import me.primitive.manhunt.map.util.CompassMapRenderer;
+import me.primitive.manhunt.util.MapUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -9,16 +11,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
-import me.primitive.manhunt.map.util.CompassMapRenderer;
-import me.primitive.manhunt.util.MapUtil;
 
-public class TestCommand implements CommandExecutor
-{
+public class TestCommand implements CommandExecutor {
+
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
-    {
-        if (sender instanceof Player)
-        {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (sender instanceof Player) {
             Player playerSender = (Player) sender;
 
             ItemStack myMap = new ItemStack(Material.FILLED_MAP, 1);

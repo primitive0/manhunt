@@ -5,6 +5,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class ManhuntPlayerContainer {
+
     @Getter
     public final OfflinePlayer offlinePlayer;
 

@@ -1,24 +1,26 @@
 package me.primitive.manhunt.map.util;
 
-import me.primitive.manhunt.render.Sprite;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.map.*;
+import java.io.IOException;
+import java.util.HashMap;
 import me.primitive.manhunt.containers.PlayerInPvh;
 import me.primitive.manhunt.containers.PvhHunter;
 import me.primitive.manhunt.management.GameTeamManager;
-
-import java.io.IOException;
-import java.util.HashMap;
+import me.primitive.manhunt.render.Sprite;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.map.MapCanvas;
+import org.bukkit.map.MapFont;
+import org.bukkit.map.MapPalette;
+import org.bukkit.map.MapRenderer;
+import org.bukkit.map.MapView;
+import org.bukkit.map.MinecraftFont;
 
 public class CompassMapRenderer extends MapRenderer {
-    private static Sprite sprite = null;
-    private static double anglePerFrame;
 
     public static HashMap<Player, Double> hunterRotateMap = new HashMap<Player, Double>();
-
     public static Player trackedPlayer;
-
+    private static Sprite sprite = null;
+    private static double anglePerFrame;
     private static boolean isInited = false;
 
     static {
@@ -59,7 +61,9 @@ public class CompassMapRenderer extends MapRenderer {
             drawLine(canvas, 16, 72, 112, 72, MapPalette.RED);
         } else {
             int frame = (int) Math.round(rotate / anglePerFrame);
-            if (frame < 0) frame += sprite.frameCount;
+            if (frame < 0) {
+                frame += sprite.frameCount;
+            }
             canvas.drawImage(31, 31, sprite.frames[frame]);
             drawTextCenter(canvas, trackedPlayer.getDisplayName(), 105, MapPalette.RED);
         }
@@ -91,7 +95,9 @@ public class CompassMapRenderer extends MapRenderer {
             MapFont.CharacterSprite symbolSprite = MinecraftFont.Font.getChar(symbol);
             for (int row = 0; row < symbolSprite.getHeight(); row++) {
                 for (int col = 0; col < symbolSprite.getWidth(); col++) {
-                    if (!symbolSprite.get(row, col)) continue;
+                    if (!symbolSprite.get(row, col)) {
+                        continue;
+                    }
                     canvas.setPixel(x + col, y + row, color);
                 }
             }

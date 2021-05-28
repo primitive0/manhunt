@@ -1,23 +1,24 @@
 package me.primitive.manhunt.render;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.awt.Image;
 import javax.imageio.ImageIO;
-
 import lombok.val;
-import org.bukkit.plugin.java.JavaPlugin;
 import me.primitive.manhunt.ManhuntPlugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class Sprite {
-    /*private*/ public Image[] frames; //TODO
+
     public final int frameCount;
+    /*private*/ public Image[] frames; //TODO
 
     public Sprite(String path, int height) throws IOException {
         val resourceInputStream = JavaPlugin.getPlugin(ManhuntPlugin.class).getResource(path);
 
-        if (resourceInputStream == null)
+        if (resourceInputStream == null) {
             throw new RuntimeException("Compass sprite not found");
+        }
 
         BufferedImage sprite = ImageIO.read(resourceInputStream);
 

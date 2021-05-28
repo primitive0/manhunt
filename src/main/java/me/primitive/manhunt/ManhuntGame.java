@@ -1,5 +1,10 @@
 package me.primitive.manhunt;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 import lombok.val;
 import me.primitive.manhunt.containers.ManhuntHunter;
 import me.primitive.manhunt.containers.ManhuntPlayer;
@@ -15,30 +20,15 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.*;
-
 public final class ManhuntGame {
-    private ManhuntGame() {
-    }
-
-    enum Team {
-        PLAYERS,
-        HUNTERS,
-    }
-
-    enum StartState {
-        STARTED_SUCCESSFULLY,
-        NOT_ENOUGH_PLAYERS,
-        ALREADY_STARTED,
-    }
 
     private static final HashMap<OfflinePlayer, Team> playerTeamMap = new HashMap<>();
-
     private static int countdownValue;
     private static BukkitTask counter;
-
     private static List<ManhuntPlayer> alivePlayers;
     private static ManhuntHunter[] aliveHunters;
+    private ManhuntGame() {
+    }
 
     public static void joinPlayers(Player player) {
         val offlinePlayer = Bukkit.getOfflinePlayer(player.getUniqueId());
@@ -57,8 +47,9 @@ public final class ManhuntGame {
     }
 
     public static boolean setCountdown(int value) {
-        if (value < 0)
+        if (value < 0) {
             return false;
+        }
 
         countdownValue = value;
 
@@ -66,8 +57,9 @@ public final class ManhuntGame {
     }
 
     public static boolean startGame() {
-        if (isGameRunning())
+        if (isGameRunning()) {
             return false;
+        }
 
         alivePlayers = new ArrayList<>();
         val huntersList = new ArrayList<ManhuntHunter>();
@@ -104,8 +96,9 @@ public final class ManhuntGame {
     }
 
     public static boolean stopGame() {
-        if (!isGameRunning())
+        if (!isGameRunning()) {
             return false;
+        }
 
         stopUnchecked();
 
@@ -130,20 +123,20 @@ public final class ManhuntGame {
         return alivePlayers;
     }
 
-    /*public static List<ManhuntPlayer> getAlivePlayers() {
-        return alivePlayers == null ? null : Collections.unmodifiableList(alivePlayers);
-    }*/
-
     public static ManhuntHunter[] getAliveHunters() {
         return aliveHunters;
     }
 
     public static ManhuntHunter getAliveHunterByUUID(UUID uuid) {
         return Arrays.stream(aliveHunters)
-                .filter(hunter -> hunter.getOfflinePlayer().getUniqueId().equals(uuid))
-                .findAny()
-                .orElse(null);
+            .filter(hunter -> hunter.getOfflinePlayer().getUniqueId().equals(uuid))
+            .findAny()
+            .orElse(null);
     }
+
+    /*public static List<ManhuntPlayer> getAlivePlayers() {
+        return alivePlayers == null ? null : Collections.unmodifiableList(alivePlayers);
+    }*/
 
     private static void runCountdown() {
         counter = new BukkitRunnable() {
@@ -164,17 +157,18 @@ public final class ManhuntGame {
                 val playSound = countdown <= 5;
 
                 Arrays.stream(aliveHunters)
-                        .map(ManhuntHunter::getOfflinePlayer)
-                        .filter(OfflinePlayer::isOnline)
-                        .forEach(offlinePlayer -> {
-                            val player = offlinePlayer.getPlayer();
+                    .map(ManhuntHunter::getOfflinePlayer)
+                    .filter(OfflinePlayer::isOnline)
+                    .forEach(offlinePlayer -> {
+                        val player = offlinePlayer.getPlayer();
 
-                            player.spigot()
-                                    .sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(text));
+                        player.spigot()
+                            .sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(text));
 
-                            if (playSound)
-                                ManhuntUtil.playTickSound(player);
-                        });
+                        if (playSound) {
+                            ManhuntUtil.playTickSound(player);
+                        }
+                    });
 
                 countdown--;
             }
@@ -189,15 +183,15 @@ public final class ManhuntGame {
             val player = hunter.getOfflinePlayer().getPlayer();
 
             player.addPotionEffect(
-                    new PotionEffect(PotionEffectType.SLOW, ticksCountdown, 255)
+                new PotionEffect(PotionEffectType.SLOW, ticksCountdown, 255)
             );
 
             player.addPotionEffect(
-                    new PotionEffect(PotionEffectType.JUMP, ticksCountdown, 128)
+                new PotionEffect(PotionEffectType.JUMP, ticksCountdown, 128)
             );
 
             player.addPotionEffect(
-                    new PotionEffect(PotionEffectType.BLINDNESS, ticksCountdown, 255)
+                new PotionEffect(PotionEffectType.BLINDNESS, ticksCountdown, 255)
             );
         }
     }
@@ -217,8 +211,9 @@ public final class ManhuntGame {
             }
         }.runTask(ManhuntPlugin.INSTANCE);
 
-        if (alivePlayers.isEmpty())
+        if (alivePlayers.isEmpty()) {
             onHuntersWin();
+        }
     }
 
     public static void onHunterDies(ManhuntHunter hunter) {
@@ -251,5 +246,16 @@ public final class ManhuntGame {
             ManhuntUtil.showWinTitle(player, "Hunters win!");
             ManhuntUtil.playHuntersWinSound(player);
         });
+    }
+
+    enum Team {
+        PLAYERS,
+        HUNTERS,
+    }
+
+    enum StartState {
+        STARTED_SUCCESSFULLY,
+        NOT_ENOUGH_PLAYERS,
+        ALREADY_STARTED,
     }
 }

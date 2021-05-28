@@ -1,17 +1,20 @@
 package me.primitive.manhunt.commands;
 
+import me.primitive.manhunt.management.GameTeamManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import me.primitive.manhunt.management.GameTeamManager;
 
 public class IAmCommand implements CommandExecutor {
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) //TODO: add chat messages
     {
         if (sender instanceof Player) {
-            if (args.length != 1) return false;
+            if (args.length != 1) {
+                return false;
+            }
 
             Player playerSender = (Player) sender;
 

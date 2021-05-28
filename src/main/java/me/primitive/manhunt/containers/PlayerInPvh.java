@@ -2,17 +2,15 @@ package me.primitive.manhunt.containers;
 
 import org.bukkit.entity.Player;
 
-public abstract class PlayerInPvh
-{
+public abstract class PlayerInPvh {
+
     protected Player bukkitPlayer;
 
-    protected PlayerInPvh(Player bukkitPlayer)
-    {
+    protected PlayerInPvh(Player bukkitPlayer) {
         this.bukkitPlayer = bukkitPlayer;
     }
 
-    public Player getBukkitPlayer()
-    {
+    public Player getBukkitPlayer() {
         return bukkitPlayer;
     }
 }

@@ -1,13 +1,13 @@
 package me.primitive.manhunt;
 
+import java.util.logging.Logger;
 import me.primitive.manhunt.render.TrackerMapRenderer;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.logging.Logger;
-
 public final class ManhuntPlugin extends JavaPlugin {
+
     public static Logger LOGGER;
     public static Plugin INSTANCE;
     public static World OVERWORLD;
@@ -27,8 +27,8 @@ public final class ManhuntPlugin extends JavaPlugin {
 
     private void registerListeners() {
         this.getServer().getPluginManager().registerEvents(
-                new ManhuntEventListener(),
-                this
+            new ManhuntEventListener(),
+            this
         );
     }
 }

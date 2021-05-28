@@ -1,18 +1,14 @@
 package me.primitive.manhunt.util;
 
 import lombok.val;
-import me.primitive.manhunt.ManhuntPlugin;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.function.Consumer;
 
 public final class ManhuntUtil {
+
     public static void playTickSound(Player player) {
         player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, 2.0f, 2.0f);
     }

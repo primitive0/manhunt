@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 
 public final class ManhuntEventListener implements Listener {
+
     @EventHandler
     public void onPlayerDies(PlayerDeathEvent event) {
         if (ManhuntGame.isGameRunning()) {
@@ -33,8 +34,9 @@ public final class ManhuntEventListener implements Listener {
 
     @EventHandler
     public void onEnderDragonChangePhase(EnderDragonChangePhaseEvent event) {
-        if (ManhuntGame.isGameRunning() && event.getNewPhase() == EnderDragon.Phase.DYING)
+        if (ManhuntGame.isGameRunning() && event.getNewPhase() == EnderDragon.Phase.DYING) {
             ManhuntGame.onPlayersWin();
+        }
     }
 
     @EventHandler

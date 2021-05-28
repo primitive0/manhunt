@@ -1,21 +1,28 @@
 package me.primitive.manhunt.render;
 
-import lombok.val;
-import lombok.var;
-import me.primitive.manhunt.ManhuntPlugin;
-import me.primitive.manhunt.ManhuntTrackerManager;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.map.*;
-
 import static me.primitive.manhunt.ManhuntTrackerManager.isTracker;
 
+import lombok.val;
+import me.primitive.manhunt.ManhuntPlugin;
+import org.bukkit.entity.Player;
+import org.bukkit.map.MapCanvas;
+import org.bukkit.map.MapFont;
+import org.bukkit.map.MapPalette;
+import org.bukkit.map.MapRenderer;
+import org.bukkit.map.MapView;
+import org.bukkit.map.MinecraftFont;
+
 public class TrackerMapRenderer extends MapRenderer {
+
     private static Sprite trackerSprite;
 
     private static double anglePerFrame;
 
     boolean rendered = false;
+
+    public TrackerMapRenderer() {
+        super(true);
+    }
 
     public static void init() {
         try {
@@ -26,8 +33,14 @@ public class TrackerMapRenderer extends MapRenderer {
         }
     }
 
-    public TrackerMapRenderer() {
-        super(true);
+    public static double deg(double in) {
+        val res = in % 360;
+
+        if (res < 0) {
+            return 360 + res;
+        }
+
+        return res;
     }
 
     @Override
@@ -43,9 +56,9 @@ public class TrackerMapRenderer extends MapRenderer {
 
         var rotate = Math.atan2(playerLocation.getX(), -playerLocation.getZ())/* + playerLocation.getYaw()*/;
 
-        if (rotate < 0)
+        if (rotate < 0) {
             rotate += 2 * Math.PI;
-
+        }
 
         rotate = 2 * Math.PI - rotate;
 
@@ -70,7 +83,9 @@ public class TrackerMapRenderer extends MapRenderer {
             MapFont.CharacterSprite symbolSprite = MinecraftFont.Font.getChar(symbol);
             for (int row = 0; row < symbolSprite.getHeight(); row++) {
                 for (int col = 0; col < symbolSprite.getWidth(); col++) {
-                    if (!symbolSprite.get(row, col)) continue;
+                    if (!symbolSprite.get(row, col)) {
+                        continue;
+                    }
                     canvas.setPixel(x + col, y + row, color);
                 }
             }
@@ -83,15 +98,5 @@ public class TrackerMapRenderer extends MapRenderer {
         val inv = player.getInventory();
 
         return isTracker(inv.getItemInMainHand()) || isTracker(inv.getItemInOffHand());
-    }
-
-
-    public static double deg(double in) {
-        val res = in % 360;
-
-        if (res < 0)
-            return 360 + res;
-
-        return res;
     }
 }
