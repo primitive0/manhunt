@@ -7,7 +7,14 @@ import lombok.val;
 import me.primitive.manhunt.game.ManhuntGame;
 import me.primitive.manhunt.game.TeamManager.TeamDropResult;
 import me.primitive.manhunt.game.TeamManager.TeamPutResult;
+import me.primitive.manhunt.map.CompassMapRenderer;
+import me.primitive.manhunt.util.MapUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.MapMeta;
+import org.bukkit.map.MapView;
 
 @CommandAlias("manhunt")
 public final class ManhuntCommand extends BaseCommand {
@@ -95,6 +102,36 @@ public final class ManhuntCommand extends BaseCommand {
         if (game.isRunning()) {
             game.forceStop();
             player.sendMessage("stopped");
+        } else {
+            player.sendMessage("game is not running");
+        }
+    }
+
+    @Subcommand("tracker")
+    public void giveTracker(Player player, String targetName) {
+        val game = ManhuntGame.getInstance();
+        if (game.isRunning()) {
+            val team = game.getTeamManager();
+            val hunter = team.getHunter(player);
+            if (hunter == null) {
+                player.sendMessage("only hunters can use tracker");
+                return;
+            }
+
+            val target = Bukkit.getPlayerExact(targetName);
+            if (target == null) {
+                player.sendMessage("target player not found");
+                return;
+            }
+
+            val targetPlayer = team.getSpeedrunner(target);
+            if (targetPlayer == null) {
+                player.sendMessage("target player is not speedrunner");
+                return;
+            }
+
+            val mapItem = MapUtil.createMapWithRenderer(new CompassMapRenderer(targetPlayer));
+            player.getInventory().addItem(mapItem);
         } else {
             player.sendMessage("game is not running");
         }
