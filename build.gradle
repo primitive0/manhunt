@@ -1,35 +1,33 @@
 plugins {
     id 'java-library'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
 
 repositories {
     mavenCentral()
 
-    maven {
-        name = "spigot-repo"
-        url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    }
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url = 'https://repo.aikar.co/content/groups/aikar/' }
 }
 
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
 
-    compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
+    shadow 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
+    implementation 'org.jetbrains:annotations:20.1.0'
+    implementation 'co.aikar:acf-paper:0.5.0-SNAPSHOT'
 }
 
-task fatJar(type: Zip) {
-    group = "build"
-
-    archiveExtension.set("jar")
-    destinationDirectory = file("$buildDir/libs")
-
-    from(sourceSets.main.output)
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
 }
 
 tasks {
     jar {
         enabled = false
-        dependsOn(fatJar)
+        dependsOn(shadowJar)
     }
 }

@@ -1,4 +1,4 @@
-main: me.primitive.manhunt.ManhuntPlugin
+main: me.primitive.manhunt.Manhunt
 name: Manhunt
 api-version: 1.15
 version: 0.1

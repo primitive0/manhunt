@@ -1,136 +1,102 @@
 package me.primitive.manhunt;
 
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.Subcommand;
 import lombok.val;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import me.primitive.manhunt.game.ManhuntGame;
+import me.primitive.manhunt.game.TeamManager.TeamDropResult;
+import me.primitive.manhunt.game.TeamManager.TeamPutResult;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
-public final class ManhuntCommand implements CommandExecutor {
+@CommandAlias("manhunt")
+public final class ManhuntCommand extends BaseCommand {
 
-    public static ItemStack cache = null;
+    @Subcommand("start")
+    public void startGame(Player player) {
+        val result = ManhuntGame.getInstance().start();
 
-    private static void joinTeam(Player sender, String[] args) {
-        val teamName = args[1];
-
-        switch (teamName) {
-            case "players":
-                ManhuntGame.joinPlayers(sender);
+        switch (result) {
+            case OK:
+                player.sendMessage("ok");
                 break;
 
-            case "hunters":
-                ManhuntGame.joinHunters(sender);
+            case NOT_ENOUGH_PLAYERS:
+                player.sendMessage("not enough players");
                 break;
 
-            case "none":
-                ManhuntGame.leaveTeam(sender);
-
-            default:
-                sender.sendMessage("This team doesn't exist");
+            case ALREADY_STARTED:
+                player.sendMessage("already started");
                 break;
         }
     }
 
-    private static void assemble(Player sender) {
-        if (ManhuntGame.isGameRunning()) {
-            sender.sendMessage("Cannot assemble players while game running!");
+    @Subcommand("join")
+    public void joinTeam(Player player, String team) {
+        val game = ManhuntGame.getInstance();
+
+        if (game.isRunning()) {
+            player.sendMessage("game is running");
             return;
         }
 
-        val spawn = ManhuntPlugin.OVERWORLD.getSpawnLocation();
-
-        for (val player : Bukkit.getOnlinePlayers()) {
-            player.teleport(spawn);
-
-            if (!player.equals(sender)) {
-                player.setGameMode(GameMode.ADVENTURE);
-            }
-        }
-    }
-
-    private static void setCountdown(Player sender, String[] args) {
-        try {
-            val res = ManhuntGame.setCountdown(
-                Integer.parseInt(args[1])
-            );
-
-            if (!res) {
-                sender.sendMessage("Wrong countdown value!");
-            }
-        } catch (NumberFormatException e) {
-            sender.sendMessage("Wrong number format!");
-        }
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Only players can execute this command");
-            return true;
-        }
-
-        if (args.length == 0) {
-            return false;
-        }
-
-        val player = ((Player) sender);
-        val commandType = args[0];
-        byte commandTypeCached;
-
-        switch (commandType) {
-            case "join":
-                joinTeam(player, args);
-                return true;
-
-            case "start":
-                commandTypeCached = 1;
+        val teamManager = game.getTeamManager();
+        TeamPutResult putResult;
+        switch (team.toLowerCase()) {
+            case "speedrunners":
+                putResult = teamManager.putSpeedrunner(player);
                 break;
 
-            case "stop":
-                commandTypeCached = 2;
-                break;
-
-            case "assemble":
-                commandTypeCached = 3;
-                break;
-
-            case "countdown":
-                commandTypeCached = 4;
+            case "hunters":
+                putResult = teamManager.putHunter(player);
                 break;
 
             default:
-                return false;
+                player.sendMessage("no team");
+                return;
         }
 
-        if (player.isOp()) {
-            switch (commandTypeCached) {
-                case 1:
-                    if (!ManhuntGame.startGame()) {
-                        player.sendMessage("Game has already started");
-                    }
-                    break;
+        switch (putResult) {
+            case OK_SPEEDRUNNER:
+                player.sendMessage("joined speedrunners");
+                break;
 
-                case 2:
-                    if (!ManhuntGame.stopGame()) {
-                        player.sendMessage("Nothing to stop");
-                    }
-                    break;
+            case OK_HUNTER:
+                player.sendMessage("joined hunters");
+                break;
 
-                case 3:
-                    assemble(player);
-                    break;
+            case ALREADY_IN:
+                player.sendMessage("already in");
+                break;
+        }
+    }
 
-                case 4:
-                    setCountdown(player, args);
-                    break;
-            }
+    @Subcommand("leave")
+    public void leaveTeam(Player player) {
+        val game = ManhuntGame.getInstance();
+
+        if (game.isRunning()) {
+            player.sendMessage("game is running");
+            return;
+        }
+
+        val result = game.getTeamManager().dropManhuntPlayer(player);
+        if (result == TeamDropResult.OK) {
+            player.sendMessage("you have left team");
         } else {
-            player.sendMessage("You must be OP to use this command");
+            player.sendMessage("you was not in any team");
         }
+    }
 
-        return true;
+    @Subcommand("stop")
+    public void stopGame(Player player) {
+        val game = ManhuntGame.getInstance();
+
+        if (game.isRunning()) {
+            game.forceStop();
+            player.sendMessage("stopped");
+        } else {
+            player.sendMessage("game is not running");
+        }
     }
 }
