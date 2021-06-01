@@ -76,7 +76,7 @@ public final class CountdownPhaseHandler extends AbstractPhaseHandler<ManhuntSha
             }
         }
 
-        phaseController.notifyPhaseEnded(PhaseType.HUNT);
+        phaseController.notifyPhaseEnded(NextPhase.HUNT);
     }
 
     private class CountdownTask extends BukkitRunnable {

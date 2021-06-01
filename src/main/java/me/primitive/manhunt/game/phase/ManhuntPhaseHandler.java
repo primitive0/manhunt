@@ -84,12 +84,12 @@ public final class ManhuntPhaseHandler extends AbstractPhaseHandler<Void> implem
 
     private void endPhase() {
         phaseHandler.stop();
-        game.notifyPhaseEnded(PhaseType.END);
+        game.notifyPhaseEnded(NextPhase.END);
     }
 
     @Override
-    public void notifyPhaseEnded(@NotNull PhaseType nextPhase) {
-        if (nextPhase == PhaseType.HUNT) {
+    public void notifyPhaseEnded(@NotNull NextPhase nextPhase) {
+        if (nextPhase == NextPhase.HUNT) {
             phaseHandler = new HuntPhaseHandler(game, this);
         } else {
             throw new IllegalStateException("Unexpected phase");

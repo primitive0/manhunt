@@ -5,7 +5,7 @@ import me.primitive.manhunt.game.container.ManhuntHunter;
 import me.primitive.manhunt.game.container.ManhuntSpeedrunner;
 import me.primitive.manhunt.game.phase.ManhuntPhaseHandler;
 import me.primitive.manhunt.game.phase.PhaseController;
-import me.primitive.manhunt.game.phase.PhaseType;
+import me.primitive.manhunt.game.phase.NextPhase;
 import org.jetbrains.annotations.NotNull;
 
 public final class ManhuntGame implements PhaseController<Void> {
@@ -95,8 +95,8 @@ public final class ManhuntGame implements PhaseController<Void> {
     }
 
     @Override
-    public void notifyPhaseEnded(final @NotNull PhaseType nextPhase) {
-        if (nextPhase == PhaseType.END) {
+    public void notifyPhaseEnded(final @NotNull NextPhase nextPhase) {
+        if (nextPhase == NextPhase.END) {
             endGame();
         } else {
             throw new IllegalStateException("Unexpected phase");
