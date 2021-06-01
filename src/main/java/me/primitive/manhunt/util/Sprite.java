@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import lombok.Getter;
 import lombok.val;
 import me.primitive.manhunt.Manhunt;
 import org.bukkit.Bukkit;
@@ -11,10 +12,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Sprite {
 
-    public final int frameCount;
-    /*private*/ public Image[] frames; //TODO
+    @Getter
+    private final int frameCount;
 
-    public Sprite(String path, int height) throws IOException {
+    private final Image[] frames;
+
+    public Sprite(String path, int frameHeight) throws IOException {
         val resourceInputStream = JavaPlugin.getPlugin(Manhunt.class).getResource(path);
 
         if (resourceInputStream == null) {
@@ -23,11 +26,11 @@ public class Sprite {
 
         BufferedImage sprite = ImageIO.read(resourceInputStream);
 
-        frameCount = sprite.getHeight() / height;
+        frameCount = sprite.getHeight() / frameHeight;
         Bukkit.getLogger().info("sprite frames: " + frameCount);
         frames = new Image[frameCount];
         for (int i = 0; i < frameCount; i++) {
-            frames[i] = sprite.getSubimage(0, i * height, sprite.getWidth(), height);
+            frames[i] = sprite.getSubimage(0, i * frameHeight, sprite.getWidth(), frameHeight);
         }
     }
 

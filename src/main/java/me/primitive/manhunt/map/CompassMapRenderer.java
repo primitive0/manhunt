@@ -18,10 +18,11 @@ import org.jetbrains.annotations.NotNull;
 public class CompassMapRenderer extends MapRenderer {
     private static Sprite sprite = null;
     private static double anglePerFrame;
+
     static {
         try {
             sprite = new Sprite("compass-sprite.png", 64);
-            anglePerFrame = Math.PI * 2 / (sprite.frameCount - 1);
+            anglePerFrame = Math.PI * 2 / (sprite.getFrameCount() - 1);
         } catch (IOException e) {
             Bukkit.getLogger().warning("Sprite not loaded! " + e.getLocalizedMessage());
         }
@@ -79,10 +80,10 @@ public class CompassMapRenderer extends MapRenderer {
         }
 
         if (frame < 0) {
-            frame += sprite.frameCount;
+            frame += sprite.getFrameCount();
         }
 
-        canvas.drawImage(31, 31, sprite.frames[frame]);
+        canvas.drawImage(31, 31, sprite.getFrame(frame));
         drawTextCenter(canvas, target.getOfflinePlayer().getName(), 105, MapPalette.RED);
     }
 
