@@ -10,11 +10,7 @@ import me.primitive.manhunt.game.TeamManager.TeamPutResult;
 import me.primitive.manhunt.map.CompassMapRenderer;
 import me.primitive.manhunt.util.MapUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.map.MapView;
 
 @CommandAlias("manhunt")
 public final class ManhuntCommand extends BaseCommand {

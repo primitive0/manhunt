@@ -116,6 +116,10 @@ public final class ManhuntPhaseHandler extends AbstractPhaseHandler<Void> implem
             this.runTask(Manhunt.INSTANCE);
         }
 
+        public static void schedule(ManhuntSpeedrunner speedrunner) {
+            new SpeedrunnerDeathHandler(speedrunner);
+        }
+
         @Override
         public void run() {
             if (speedrunner.isOnline()) {
@@ -123,10 +127,6 @@ public final class ManhuntPhaseHandler extends AbstractPhaseHandler<Void> implem
                 player.spigot().respawn();
                 player.teleport(deathLocation);
             }
-        }
-
-        public static void schedule(ManhuntSpeedrunner speedrunner) {
-            new SpeedrunnerDeathHandler(speedrunner);
         }
     }
 }

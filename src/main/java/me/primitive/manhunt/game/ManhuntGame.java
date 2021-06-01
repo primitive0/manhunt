@@ -4,28 +4,24 @@ import lombok.Getter;
 import me.primitive.manhunt.game.container.ManhuntHunter;
 import me.primitive.manhunt.game.container.ManhuntSpeedrunner;
 import me.primitive.manhunt.game.phase.ManhuntPhaseHandler;
-import me.primitive.manhunt.game.phase.PhaseController;
 import me.primitive.manhunt.game.phase.NextPhase;
+import me.primitive.manhunt.game.phase.PhaseController;
 import org.jetbrains.annotations.NotNull;
 
 public final class ManhuntGame implements PhaseController<Void> {
 
     private static ManhuntGame MANHUNT_GAME;
+    @Getter
+    private final TeamManager teamManager = new TeamManager();
+    @Getter
+    private final GameSettings settings = new GameSettings();
+    @Getter
+    private boolean running = false;
+    private ManhuntPhaseHandler phaseHandler = null;
 
     public static ManhuntGame getInstance() {
         return MANHUNT_GAME == null ? MANHUNT_GAME = new ManhuntGame() : MANHUNT_GAME;
     }
-
-    @Getter
-    private boolean running = false;
-
-    @Getter
-    private final TeamManager teamManager = new TeamManager();
-
-    @Getter
-    private final GameSettings settings = new GameSettings();
-
-    private ManhuntPhaseHandler phaseHandler = null;
 
     public StartResult start() {
         if (running) {

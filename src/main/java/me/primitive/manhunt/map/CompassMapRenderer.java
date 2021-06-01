@@ -1,7 +1,6 @@
 package me.primitive.manhunt.map;
 
 import java.io.IOException;
-
 import lombok.val;
 import lombok.var;
 import me.primitive.manhunt.game.container.ManhuntSpeedrunner;
@@ -16,6 +15,7 @@ import org.bukkit.map.MinecraftFont;
 import org.jetbrains.annotations.NotNull;
 
 public class CompassMapRenderer extends MapRenderer {
+
     private static Sprite sprite = null;
     private static double anglePerFrame;
 
@@ -29,6 +29,7 @@ public class CompassMapRenderer extends MapRenderer {
     }
 
     public ManhuntSpeedrunner target;
+
     public CompassMapRenderer(ManhuntSpeedrunner target) {
         this.target = target;
     }

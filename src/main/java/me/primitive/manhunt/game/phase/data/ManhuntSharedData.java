@@ -8,9 +8,8 @@ import me.primitive.manhunt.game.container.ManhuntSpeedrunner;
 @Getter
 public final class ManhuntSharedData {
 
-    private boolean initialized = false;
-
     private final Collection<ManhuntSpeedrunner> aliveSpeedrunners = new ArrayList<>();
+    private boolean initialized = false;
 
     public void initialize(Collection<ManhuntSpeedrunner> aliveSpeedrunners) {
         if (initialized) {
